@@ -147,12 +147,13 @@ class Client:
             valid_entity, HR_10 / valid_entity
 
     def get_params(self):
-        return copy.deepcopy(self.model.encoder_list[self.c_id].state_dict())
+        return copy.deepcopy(self.model.encoder_list[self.c_id].state_dict()), copy.deepcopy(self.model.GNN_encoder_list[self.c_id].state_dict())
 
     def set_shared_params(self, model_shared_params):
         for id, shared_params in model_shared_params.items():
             if id != self.c_id:
-                self.model.encoder_list[id].load_state_dict(shared_params)
+                self.model.encoder_list[id].load_state_dict(shared_params[0])
+                self.model.GNN_encoder_list[id].load_state_dict(shared_params[1])
 
     def save_params(self):
         method_ckpt_path = os.path.join(self.checkpoint_dir,
@@ -172,10 +173,8 @@ class Client:
             print("[ Warning: Saving failed... continuing anyway. ]")
 
     def load_params(self):
-        ckpt_filename = os.path.join(self.checkpoint_dir,
-                                     "domain_" +
-                                     "".join([domain[0]
-                                             for domain in self.args.domains]),
+        ckpt_filename = os.path.join(self.checkpoint_dir, "domain_" + "".join([domain[0] 
+                                        for domain in self.args.domains]),
                                      "FMoE_DCSR_" + self.model_id,
                                      "client%d.pt" % self.c_id)
         try:

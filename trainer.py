@@ -2,6 +2,7 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from models.moe_gsan_model import MoeGSAN
 from models import config
 from utils import train_utils
@@ -46,8 +47,8 @@ class ModelTrainer(Trainer):
         params_to_remove = []
         for i in range(self.num_domains):
             if i != self.c_id:
-                params_to_remove.extend(
-                    list(self.model.encoder_list[i].parameters()))
+                params_to_remove.extend( list(self.model.encoder_list[i].parameters()))
+                params_to_remove.extend( list(self.model.GNN_encoder_list[i].parameters()))
         self.params = [param for param in self.params if all(
             id(param) != id(exclude_param) for exclude_param in params_to_remove)]
 
@@ -76,17 +77,15 @@ class ModelTrainer(Trainer):
         sessions = [torch.LongTensor(x).to(self.device) for x in sessions]
         # seq: (batch_size, seq_len), ground: (batch_size, seq_len),
         # ground_mask:  (batch_size, seq_len),
-        # js_neg_seqs: (batch_size, seq_len),
         # contrast_aug_seqs: (batch_size, seq_len)
-        # Here `js_neg_seqs` is used for computing similarity loss,
-        # `contrast_aug_seqs` is used for computing contrastive infomax
+        # Here `contrast_aug_seqs` is used for computing contrastive infomax
         # loss
         seq, ground, ground_mask, contrast_aug_seqs = sessions
-        result_list, result_shared, \
+        result_list, result_shared, result_weights, \
             mu_list, logvar_list, z_list, aug_z_list = self.model(
                 seq, aug_seqs=contrast_aug_seqs)
 
-        loss = self.moe_gsan_loss_fn(result_list, result_shared,
+        loss = self.moe_gsan_loss_fn(result_list, result_shared, result_weights,
                                         mu_list, logvar_list,
                                         ground, z_list,
                                         aug_z_list, ground_mask,
@@ -97,7 +96,7 @@ class ModelTrainer(Trainer):
         self.step += 1
         return loss.item()
 
-    def moe_gsan_loss_fn(self, result_list, result_shared,
+    def moe_gsan_loss_fn(self, result_list, result_shared, result_weights,
                           mu_list, logvar_list,
                           ground, z_list,
                           aug_z_list, ground_mask,
@@ -106,6 +105,7 @@ class ModelTrainer(Trainer):
         """
 
         recons_loss_sum = 0
+        recons_loss_list = []
         for i in range(self.num_domains):
             recons_loss = self.cs_criterion(
                 result_list[i].reshape(-1, num_items + 1),
@@ -113,12 +113,18 @@ class ModelTrainer(Trainer):
             recons_loss = (recons_loss *
                            (ground_mask.reshape(-1))).mean()
             recons_loss_sum = recons_loss_sum + recons_loss
+            recons_loss_list.append(recons_loss)
 
         recons_loss_shared = self.cs_criterion(
-            result_shared.reshape(-1, num_items + 1),
-            ground.reshape(-1))  # (batch_size * seq_len, )
+        result_shared.reshape(-1, num_items + 1),
+        ground.reshape(-1))  # (batch_size * seq_len, )
         recons_loss_shared = (recons_loss_shared *
                               (ground_mask.reshape(-1))).mean()
+        recons_loss_sum = recons_loss_sum + recons_loss_shared
+
+        target_weights = F.softmax(-torch.stack(recons_loss_list), dim=-1).detach().to(self.device)
+        gate_loss = F.kl_div(result_weights.log(), target_weights, reduction="mean")
+        # gate_loss = F.mse_loss(result_weights, target_weights)
 
         kld_loss_sum = 0
         for i in range(self.num_domains):
@@ -128,12 +134,14 @@ class ModelTrainer(Trainer):
             kld_loss = (kld_loss * (ground_mask.reshape(-1))).mean()
             kld_loss_sum += kld_loss
 
-        alpha = 1.0  # 1.0 for all scenarios
+        alpha = self.args.alpha  # 1.0 for all scenarios
 
         kld_weight = self.kl_anneal_function(
             self.args.anneal_cap, step, self.args.total_annealing_step)
 
-        beta = 1.0  # 1.0 for FKCB and BMG, 0.1 for SGH
+        beta = self.args.beta  # 1.0 for FKCB and BMG, 0.1 for SGH
+
+        omega = self.args.omega
 
         contrastive_loss_sum = 0
         for i in range(self.num_domains):
@@ -144,9 +152,9 @@ class ModelTrainer(Trainer):
             contrastive_loss = contrastive_loss.mean()
             contrastive_loss_sum += contrastive_loss
 
-        loss = alpha * ((recons_loss_sum + recons_loss_shared) +
-                        kld_weight * kld_loss_sum) +\
-            + beta * (contrastive_loss_sum)
+        loss = alpha * (recons_loss_sum + kld_weight * kld_loss_sum) +\
+            beta * (contrastive_loss_sum) +\
+            omega * gate_loss
 
         return loss
 

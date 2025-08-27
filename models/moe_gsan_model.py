@@ -26,18 +26,22 @@ class Encoder(nn.Module):
 class Moe(nn.Module):
     def __init__(self, num_experts, input_dim):
         super(Moe, self).__init__()
-        self.num_experts = num_experts
+        # self.gate_net = nn.Sequential(
+        #     nn.Linear(input_dim, config.hidden_size * 4),
+        #     nn.GELU(),
+        #     nn.LayerNorm(config.hidden_size * 4),
+        #     nn.Dropout(config.dropout_rate),
+        #     nn.Linear(config.hidden_size * 4, config.hidden_size * 2),
+        #     nn.GELU(),
+        #     nn.LayerNorm(config.hidden_size * 2),
+        #     nn.Dropout(config.dropout_rate),
+        #     nn.Linear(config.hidden_size * 2, num_experts)
+        # )
 
         self.gate_net = nn.Sequential(
-            nn.Linear(input_dim, config.hidden_size * 4),
-            nn.GELU(),
-            nn.LayerNorm(config.hidden_size * 4),
-            nn.Dropout(config.dropout_rate),
-            nn.Linear(config.hidden_size * 4, config.hidden_size * 2),
-            nn.GELU(),
-            nn.LayerNorm(config.hidden_size * 2),
-            nn.Dropout(config.dropout_rate),
-            nn.Linear(config.hidden_size * 2, num_experts)
+            nn.Linear(input_dim, config.hidden_size),
+            nn.ReLU(),
+            nn.Linear(config.hidden_size, num_experts)
         )
 
     def forward(self, z_moe):
@@ -174,16 +178,14 @@ class MoeGSAN(nn.Module):
             z_moe_list.append(z_list[i].detach())
 
         z_moe = torch.cat(z_moe_list, dim=-1)
-        result_weight = self.moe(z_moe)
+        result_weights = self.moe(z_moe)
 
         result_moe = torch.zeros_like(result_list[self.c_id])
         for i in range(self.num_domains):
-            result_moe += result_weight[i] * result_list[i].detach()
+            result_moe += result_weights[i] * result_list[i].detach()
                 
         if self.training:
-            return result_list, \
-                result_moe, \
+            return result_list, result_moe, result_weights, \
                 mu_list, logvar_list, z_list, aug_z_list
         else:
-            return result_list, \
-                result_moe
+            return result_list, result_moe

@@ -65,6 +65,9 @@ def arg_parse():
                         default=5, help="Early stop patience.")
     parser.add_argument("--ld_patience", type=int, default=1,
                         help="Learning rate decay patience.")
+    parser.add_argument("--alpha", type=float, default=1.0)
+    parser.add_argument("--beta", type=float, default=1.0)
+    parser.add_argument("--omega", type=float, default=0.1)
 
     # KL annealing arguments for variantional method
     parser.add_argument("--anneal_cap", type=float, default=1.0, help="KL "
