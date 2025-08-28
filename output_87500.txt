@@ -1,0 +1,158 @@
+Successfully load Food train data!
+Successfully preprocess Food train data!
+Successfully load Food valid data!
+Successfully preprocess Food valid data!
+Successfully load Food test data!
+Successfully preprocess Food test data!
+Successfully load Kitchen train data!
+Successfully preprocess Kitchen train data!
+Successfully load Kitchen valid data!
+Successfully preprocess Kitchen valid data!
+Successfully load Kitchen test data!
+Successfully preprocess Kitchen test data!
+Successfully load Clothing train data!
+Successfully preprocess Clothing train data!
+Successfully load Clothing valid data!
+Successfully preprocess Clothing valid data!
+Successfully load Clothing test data!
+Successfully preprocess Clothing test data!
+Successfully load Beauty train data!
+Successfully preprocess Beauty train data!
+Successfully load Beauty valid data!
+Successfully preprocess Beauty valid data!
+Successfully load Beauty test data!
+Successfully preprocess Beauty test data!
+Food graph loaded!
+Kitchen graph loaded!
+Clothing graph loaded!
+Beauty graph loaded!
+Config saved to file checkpoint/domain_FKCB/FMoE_DCSR_00/config.json.
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client0.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client1.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client2.pt
+Model saved to checkpoint/domain_FKCB/FMoE_DCSR_00/client3.pt
+Successfully load Movies train data!
+Successfully preprocess Movies train data!
+Successfully load Movies valid data!
+Successfully preprocess Movies valid data!
+Successfully load Movies test data!
+Successfully preprocess Movies test data!
+Successfully load Books train data!
+Successfully preprocess Books train data!
+Successfully load Books valid data!

@@ -26,29 +26,19 @@ class Encoder(nn.Module):
 class Moe(nn.Module):
     def __init__(self, num_experts, input_dim):
         super(Moe, self).__init__()
-        # self.gate_net = nn.Sequential(
-        #     nn.Linear(input_dim, config.hidden_size * 4),
-        #     nn.GELU(),
-        #     nn.LayerNorm(config.hidden_size * 4),
-        #     nn.Dropout(config.dropout_rate),
-        #     nn.Linear(config.hidden_size * 4, config.hidden_size * 2),
-        #     nn.GELU(),
-        #     nn.LayerNorm(config.hidden_size * 2),
-        #     nn.Dropout(config.dropout_rate),
-        #     nn.Linear(config.hidden_size * 2, num_experts)
-        # )
-
         self.gate_net = nn.Sequential(
             nn.Linear(input_dim, config.hidden_size),
             nn.ReLU(),
+            nn.Dropout(config.dropout_rate),
             nn.Linear(config.hidden_size, num_experts)
         )
 
-    def forward(self, z_moe):
-        z_moe_pool = z_moe.mean(dim=[0, 1])  # (input_dim)
-        gate_logits = self.gate_net(z_moe_pool)  # (num_domains)
+    def forward(self, gate_input):
+        # gate_input: (B, L, input_dim)
+        pooled = gate_input.mean(dim=[0, 1])   # (input_dim,)
+        gate_logits = self.gate_net(pooled)  # (num_experts,)
         gate_weights = F.softmax(gate_logits, dim=-1)
-        return gate_weights  # (num_domains)
+        return gate_weights
 
 
 class MoeGSAN(nn.Module):
@@ -57,6 +47,7 @@ class MoeGSAN(nn.Module):
         self.device = "cuda:%s" % args.gpu if args.cuda else "cpu"
         self.num_domains = num_domains
         self.c_id = c_id
+        self.args = args
         # Item embeddings cannot be shared between clients, because the number
         # of items in each domain is different.
         self.item_emb_list = nn.ModuleList(
@@ -81,8 +72,8 @@ class MoeGSAN(nn.Module):
         self.dropout_list = nn.ModuleList(
             [nn.Dropout(config.dropout_rate) for i in range(self.num_domains)])
 
-        self.moe = Moe(
-            self.num_domains, config.hidden_size * self.num_domains)
+        self.domain_embs = nn.Parameter(torch.randn(self.num_domains, 8))
+        self.moe = Moe(self.num_domains, 266 * self.num_domains)
 
     def my_index_select_embedding(self, memory, index):
         tmp = list(index.size()) + [-1]
@@ -173,19 +164,37 @@ class MoeGSAN(nn.Module):
             result_pad = self.linear_pad_list[i](z_list[i])
             result_list.append(torch.cat((result, result_pad), dim=-1))
 
-        z_moe_list = []
-        for i in range(self.num_domains):
-            z_moe_list.append(z_list[i].detach())
-
-        z_moe = torch.cat(z_moe_list, dim=-1)
-        result_weights = self.moe(z_moe)
+        gate_input = self.build_gate_input(result_list, z_list)
+        result_weights = self.moe(gate_input)
 
         result_moe = torch.zeros_like(result_list[self.c_id])
         for i in range(self.num_domains):
             result_moe += result_weights[i] * result_list[i].detach()
-                
+
         if self.training:
             return result_list, result_moe, result_weights, \
                 mu_list, logvar_list, z_list, aug_z_list
         else:
             return result_list, result_moe
+        
+    def build_gate_input(self, result_list, z_list):
+        # result_list: list of (batch, seq_len, out_dim) logits per domain
+        # z_list: list of (batch, seq_len, z_dim) per domain (representations)
+        parts = []
+        for i in range(self.num_domains):
+            logits = result_list[i]                 # (B, seq_len, C)
+            logits_max = torch.max(logits, dim=-1, keepdim=True)[0]  # (B, seq_len, 1)
+            logits_mean = torch.mean(logits, dim=-1, keepdim=True)   # (B, seq_len, 1)
+            B, L = logits.size(0), logits.size(1)
+
+            z = z_list[i]                           # (B, seq_len, z_dim)
+            # z_norm = torch.norm(z, p=2, dim=-1, keepdim=True)  # (B, seq_len, 1)
+
+            dom_emb = self.domain_embs[i].unsqueeze(0).unsqueeze(1).expand(B, L, -1)  # (B, L, dom_emb_dim)
+
+            # part = torch.cat([logits_max, logits_mean, z_norm, dom_emb], dim=-1)  # (B, L, 3 + dom_emb_dim)
+            part = torch.cat([logits_max, logits_mean, dom_emb, z], dim=-1)  # (B, L, 2 + dom_emb_dim + 256)
+            parts.append(part)
+
+        gate_input = torch.cat(parts, dim=-1)
+        return gate_input

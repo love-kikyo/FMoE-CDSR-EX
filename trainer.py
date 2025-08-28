@@ -124,7 +124,6 @@ class ModelTrainer(Trainer):
 
         target_weights = F.softmax(-torch.stack(recons_loss_list), dim=-1).detach().to(self.device)
         gate_loss = F.kl_div(result_weights.log(), target_weights, reduction="mean")
-        # gate_loss = F.mse_loss(result_weights, target_weights)
 
         kld_loss_sum = 0
         for i in range(self.num_domains):
