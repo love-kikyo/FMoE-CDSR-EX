@@ -53,7 +53,7 @@ class PointWiseFeedForward(nn.Module):
 
 
 class SelfAttention(nn.Module):
-    def __init__(self, num_items, args, id):
+    def __init__(self, num_items, args):
         super(SelfAttention, self).__init__()
         self.num_items = num_items
         self.device = "cuda:%s" % args.gpu if args.cuda else "cpu"

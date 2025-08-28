@@ -8,10 +8,10 @@ import torch.nn.functional as F
 
 
 class Encoder(nn.Module):
-    def __init__(self, num_items, args, id):
+    def __init__(self, num_items, args):
         super(Encoder, self).__init__()
-        self.encoder_mu = SelfAttention(num_items, args, id)
-        self.encoder_logvar = SelfAttention(num_items, args, id)
+        self.encoder_mu = SelfAttention(num_items, args)
+        self.encoder_logvar = SelfAttention(num_items, args)
 
     def forward(self, seqs, seqs_data):
         """
@@ -60,7 +60,7 @@ class MoeGSAN(nn.Module):
             [GCNLayer(args) for i in range(self.num_domains)])
 
         self.encoder_list = nn.ModuleList(
-            [Encoder(num_items, args, i) for i in range(self.num_domains)])
+            [Encoder(num_items, args) for i in range(self.num_domains)])
 
         self.linear_list = nn.ModuleList([nn.Linear(
             config.hidden_size, num_items) for i in range(self.num_domains)])
@@ -72,8 +72,8 @@ class MoeGSAN(nn.Module):
         self.dropout_list = nn.ModuleList(
             [nn.Dropout(config.dropout_rate) for i in range(self.num_domains)])
 
-        self.domain_embs = nn.Parameter(torch.randn(self.num_domains, 8))
-        self.moe = Moe(self.num_domains, 266 * self.num_domains)
+        self.domain_embs = nn.Parameter(torch.randn(self.num_domains, config.hidden_size))
+        self.moe = Moe(self.num_domains, 259 * self.num_domains)
 
     def my_index_select_embedding(self, memory, index):
         tmp = list(index.size()) + [-1]
@@ -188,12 +188,12 @@ class MoeGSAN(nn.Module):
             B, L = logits.size(0), logits.size(1)
 
             z = z_list[i]                           # (B, seq_len, z_dim)
-            # z_norm = torch.norm(z, p=2, dim=-1, keepdim=True)  # (B, seq_len, 1)
+            z_norm = torch.norm(z, p=2, dim=-1, keepdim=True)  # (B, seq_len, 1)
 
             dom_emb = self.domain_embs[i].unsqueeze(0).unsqueeze(1).expand(B, L, -1)  # (B, L, dom_emb_dim)
 
             # part = torch.cat([logits_max, logits_mean, z_norm, dom_emb], dim=-1)  # (B, L, 3 + dom_emb_dim)
-            part = torch.cat([logits_max, logits_mean, dom_emb, z], dim=-1)  # (B, L, 2 + dom_emb_dim + 256)
+            part = torch.cat([logits_max, logits_mean, z_norm, dom_emb], dim=-1)  # (B, L, 3 + dom_emb_dim)
             parts.append(part)
 
         gate_input = torch.cat(parts, dim=-1)
